@@ -1,0 +1,8 @@
+{
+  "name": "ironman_to_epub",
+  "version": "0.0.1",
+  "description": "A tool for convert ironman series articles to epub format.",
+  "main": "index.js",
+  "author": "Kirk Chen <rwk0119@yahoo.com.tw>",
+  "license": "MIT"
+}
