@@ -4,5 +4,9 @@
   "description": "A tool for convert ironman series articles to epub format.",
   "main": "index.js",
   "author": "Kirk Chen <rwk0119@yahoo.com.tw>",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "request": "^2.85.0",
+    "request-promise-native": "^1.0.5"
+  }
 }
