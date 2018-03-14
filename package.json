@@ -6,6 +6,7 @@
   "author": "Kirk Chen <rwk0119@yahoo.com.tw>",
   "license": "MIT",
   "dependencies": {
+    "cheerio": "^1.0.0-rc.2",
     "request": "^2.85.0",
     "request-promise-native": "^1.0.5"
   }
