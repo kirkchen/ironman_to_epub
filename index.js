@@ -1,8 +1,14 @@
 const request = require('request-promise-native');
 const cheerio = require('cheerio');
 const Epub = require('epub-gen');
+const minimist = require('minimist');
 
 async function GenerateEbook(url, outputPath) {
+    // Check is required data exist
+    if(!url || !outputPath){
+        throw new Error('url or outputpath is not provided!');
+    }
+
     let body = await request.get(url);
     let $ = cheerio.load(body, { decodeEntities: false });
 
@@ -52,7 +58,9 @@ async function GenerateEbook(url, outputPath) {
     await new Epub(options, outputPath).promise;
 }
 
-let url = '';
-let outputPath = 'test.epub'
+let argv = minimist(process.argv);
+let url = argv.url;
+let outputPath = argv.outputPath; 
+
 GenerateEbook(url, outputPath)
-    .then(() => console.log('Finished!'));
+    .then(() => console.log('Finished!'), (err)=> console.error(err));
