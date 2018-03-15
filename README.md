@@ -1,4 +1,4 @@
-# A tool for convert ironman article series to epub fornat
+# A tool for convert ironman article series to epub format
 
 ## How to use?
 
