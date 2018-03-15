@@ -1,15 +1,18 @@
 const request = require('request-promise-native');
 const cheerio = require('cheerio');
+const Epub = require('epub-gen');
 
-async function Analysis(url) {
+async function GenerateEbook(url, outputPath) {
     let body = await request.get(url);
     let $ = cheerio.load(body, { decodeEntities: false });
 
-    // Parse article's count
+    // Parse article's information
     let countText = $('div.qa-list__info').eq(0).find('span').eq(1).html();
     let countPattern = /(\d+)/i;
     let count = countText.match(countPattern)[0];
     let pageCount = Math.ceil(count / 10);
+    let title = $('h3.qa-list__title').html().replace(/<[^>]*>/g,"").trim();
+    let author = $('div.profile-header__name').html().replace(/<[^>]*>/g,"").trim();
 
     // Parse articles link
     let articles = [];
@@ -24,21 +27,32 @@ async function Analysis(url) {
             let url = $(element).attr('href').trim();
 
             articles.push({ title, url });
-        })
-        break;
+        });
     }
 
+    // Fetch articles
     for (const article of articles) {
+        console.log(`Fetching article: ${article.title}`);
+
         let body = await request.get(article.url);
         let $ = cheerio.load(body, { decodeEntities: false });
 
-        article.content = $('div.markdown .markdown__style').html().trim();
-        break;
+        article.data = $('div.markdown .markdown__style').html().trim();
+        delete article.url;
     }
 
-    console.dir(articles[0]);
+    // Generate epub
+    let options = {
+        title: title,
+        author: author,
+        appendChapterTitles: false,
+        content: articles
+    }
+
+    await new Epub(options, outputPath).promise;
 }
 
 let url = '';
-Analysis(url)
+let outputPath = 'test.epub'
+GenerateEbook(url, outputPath)
     .then(() => console.log('Finished!'));
