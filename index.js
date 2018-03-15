@@ -23,11 +23,20 @@ async function Analysis(url) {
             let title = $(element).html().trim();
             let url = $(element).attr('href').trim();
 
-            articles.push({title, url});
+            articles.push({ title, url });
         })
+        break;
     }
 
-    console.log(articles);
+    for (const article of articles) {
+        let body = await request.get(article.url);
+        let $ = cheerio.load(body, { decodeEntities: false });
+
+        article.content = $('div.markdown .markdown__style').html().trim();
+        break;
+    }
+
+    console.dir(articles[0]);
 }
 
 let url = '';
